@@ -21,7 +21,7 @@ export 'package:image_picker/image_picker.dart';
 
 export '../functions/apis.dart';
 export '../functions/app_functions.dart';
-export '../screens/home.dart';
+export '../screens/introScreen.dart';
 export '../utils/app_routes.dart';
 export '../utils/colors.dart';
 export '../utils/constants.dart';

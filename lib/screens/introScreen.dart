@@ -1,7 +1,7 @@
 import '../widgets/widgets_imports.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class IntroScreen extends StatelessWidget {
+  const IntroScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

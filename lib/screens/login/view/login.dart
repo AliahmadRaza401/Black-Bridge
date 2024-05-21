@@ -1,9 +1,9 @@
+import 'package:the_blackbridge_group/screens/auth/login/controller/login_controller.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
-  final emailController = TextEditingController();
-  final passswordController = TextEditingController();
+  final LoginController controller = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,9 +16,11 @@ class Login extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 heightBox(.08),
-                Image.asset(
-                  "assets/images/logo.png",
-                  height: kHeight(.15),
+                Center(
+                  child: Image.asset(
+                    "assets/images/logo.png",
+                    height: kHeight(.15),
+                  ),
                 ),
                 heightBox(0.1),
                 CustomText(
@@ -48,7 +50,7 @@ class Login extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: emailController,
+                    controller: controller.emailController,
                     label: "Enter Email Address",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -67,21 +69,27 @@ class Login extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: passswordController,
+                    controller: controller.passswordController,
                     label: "Enter Password",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
                     suffixIcon: const Icon(null),
                     prefixIcon: const Icon(null)),
                 heightBox(.05),
-                PrimaryButton(
-                  height: 0.06,
-                  fontsize: 18,
-                  width: .9,
-                  textcolor: KColors.kWhite,
-                  color: KColors.kPrimary,
-                  text: "Log in",
-                  function: () {},
+                Obx(
+                  () => controller.loading.value
+                      ? Center(child: loader())
+                      : PrimaryButton(
+                          height: 0.06,
+                          fontsize: 18,
+                          width: .9,
+                          textcolor: KColors.kWhite,
+                          color: KColors.kPrimary,
+                          text: "Log in",
+                          function: () {
+                            controller.login();
+                          },
+                        ),
                 ),
                 heightBox(.01),
                 CustomText(

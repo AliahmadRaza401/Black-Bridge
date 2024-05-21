@@ -1,12 +1,22 @@
 import 'package:image_picker/image_picker.dart';
+import 'package:the_blackbridge_group/screens/auth/login/model/user_model.dart';
+import 'package:the_blackbridge_group/screens/formpage/view/formpage.dart';
+import 'package:the_blackbridge_group/screens/login/view/login.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
+import 'package:http/http.dart' as http;
 
 class Registeration2Controller extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final passswordController = TextEditingController();
 
-  final RxString base64Image = RxString("");
-  final RxString base64Image1 = RxString("");
-  final RxString base64Image2 = RxString("");
+  final RxString profileImg = RxString("");
+  final RxString passportImg = RxString("");
+  final RxString cnicImg = RxString("");
+  final RxString drivingLImg = RxString("");
 
   final Rxn<File> image = Rxn<File>();
   final RxnString imageEdit = RxnString();
@@ -16,6 +26,12 @@ class Registeration2Controller extends GetxController {
 
   // final Rxn<File> image3 = Rxn<File>();
   // final RxnString image3Edit = RxnString();
+  RxBool loading = false.obs;
+
+  setLoading(value) {
+    loading.value = value;
+    update();
+  }
 
   Future pickFromGallery() async {
     var pickedFile = await ImagePicker().pickImage(
@@ -33,8 +49,8 @@ class Registeration2Controller extends GetxController {
       File rotatedImage =
           await FlutterExifRotation.rotateImage(path: image.value!.path);
 
-      var tempBase64Image = await convertToBase64(rotatedImage);
-      return tempBase64Image;
+      var tempprofileImg = await convertToBase64(rotatedImage);
+      return tempprofileImg;
     }
   }
 
@@ -56,66 +72,122 @@ class Registeration2Controller extends GetxController {
       File rotatedImage =
           await FlutterExifRotation.rotateImage(path: image.value!.path);
 
-      var tempBase64Image = await convertToBase64(rotatedImage);
-      return tempBase64Image;
+      var tempprofileImg = await convertToBase64(rotatedImage);
+      return tempprofileImg;
     }
   }
 
-  // Future pickFromCam() async {
-  //   var pickedFile = await ImagePicker().pickImage(
-  //     source: ImageSource.camera,
-  //     maxHeight: 1200,
-  //     maxWidth: 1080,
-  //   );
+  singUp() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
-  //   var imagePath = pickedFile == null ? null : File(pickedFile.path);
-  //   if (imagePath != null) {
-  //     imageEdit.value = null;
+    setLoading(true);
 
-  //     image.value = File(imagePath.path);
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(Apis.register),
+      );
+      request.headers.addAll({
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      });
+      request.fields['email'] = emailController.text.trim();
+      request.fields['name'] = firstnameController.text.trim();
+      // request.fields['country'] = "";
+      request.fields['phone'] = phoneController.text.trim();
+      request.fields['password'] = passswordController.text.trim();
 
-  //     File rotatedImage =
-  //         await FlutterExifRotation.rotateImage(path: image.value!.path);
+      if (profileImg.value.contains('cache')) {
+        final file = File(profileImg.value);
+        request.files
+            .add(await http.MultipartFile.fromPath('avatar', file.path));
+        debugPrint('updating the file');
+      } else {
+        request.fields['avatar'] = profileImg.value;
+      }
 
-  //     image.value = await compressImage(rotatedImage);
-  //   }
-  // }
+      if (passportImg.value.contains('cache')) {
+        final file = File(passportImg.value);
+        request.files
+            .add(await http.MultipartFile.fromPath('f_passport', file.path));
+        debugPrint('updating the file');
+      } else {
+        request.fields['f_passport'] = passportImg.value;
+      }
 
-  // Future pickFromGallery() async {
-  //   var pickedFile2 = await ImagePicker().pickImage(
-  //     source: ImageSource.gallery,
-  //     maxHeight: 1200,
-  //     maxWidth: 1080,
-  //   );
+      // if (passportImg.value.contains('cache')) {
+      //   final file = File(passportImg.value);
+      //   request.files
+      //       .add(await http.MultipartFile.fromPath('b_passport', file.path));
+      //   debugPrint('updating the file');
+      // } else {
+      //   request.fields['b_passport'] = passportImg.value;
+      // }
 
-  //   var imagePath2 = pickedFile2 == null ? null : File(pickedFile2.path);
-  //   if (imagePath2 != null) {
-  //     image2Edit.value = null;
+      if (cnicImg.value.contains('cache')) {
+        final file = File(cnicImg.value);
+        request.files
+            .add(await http.MultipartFile.fromPath('f_cnic', file.path));
+        debugPrint('updating the file');
+      } else {
+        request.fields['f_cnic'] = cnicImg.value;
+      }
 
-  //     image2.value = File(imagePath2.path);
+      // if (cnicImg.value.contains('cache')) {
+      //   final file = File(cnicImg.value);
+      //   request.files
+      //       .add(await http.MultipartFile.fromPath('b_cnic', file.path));
+      //   debugPrint('updating the file');
+      // } else {
+      //   request.fields['b_cnic'] = cnicImg.value;
+      // }
 
-  //     File rotatedImage =
-  //         await FlutterExifRotation.rotateImage(path: image2.value!.path);
+      if (drivingLImg.value.contains('cache')) {
+        final file = File(drivingLImg.value);
+        request.files.add(
+            await http.MultipartFile.fromPath('f_driving_licence', file.path));
+        debugPrint('updating the file');
+      } else {
+        request.fields['f_driving_licence'] = drivingLImg.value;
+      }
 
-  //     image2.value = await compressImage(rotatedImage);
-  //   }
+      // if (drivingLImg.value.contains('cache')) {
+      //   final file = File(drivingLImg.value);
+      //   request.files.add(
+      //       await http.MultipartFile.fromPath('b_driving_licence', file.path));
+      //   debugPrint('updating the file');
+      // } else {
+      //   request.fields['b_driving_licence'] = drivingLImg.value;
+      // }
 
-  //   var pickedFile3 = await ImagePicker().pickImage(
-  //     source: ImageSource.gallery,
-  //     maxHeight: 1200,
-  //     maxWidth: 1080,
-  //   );
+      log(request.fields.toString());
+      log(request.files.toString());
 
-  //   var imagePath3 = pickedFile3 == null ? null : File(pickedFile3.path);
-  //   if (imagePath3 != null) {
-  //     image3Edit.value = null;
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      var result = jsonDecode(response.body);
 
-  //     image3.value = File(imagePath3.path);
+      log("status Code: ${response.statusCode}");
+      log('result: ${response.body}');
 
-  //     File rotatedImage =
-  //         await FlutterExifRotation.rotateImage(path: image3.value!.path);
+      if (result['status'].toString() != "failed") {
+        UserModel user = UserModel.fromJson(result);
 
-  //     image3.value = await compressImage(rotatedImage);
-  //   }
-  // }
+        pref.setString("userData", jsonEncode(user));
+        KSnackBar().successSnackBar("Account Created Successfully!");
+        Get.to(FormPage());
+        emailController.clear();
+      } else {
+        KSnackBar().errorSnackBar("${result['data'].toString()}");
+      }
+      setLoading(false);
+    } catch (e) {
+      log('e: $e');
+      KSnackBar().errorSnackBar("${e.toString()}");
+
+      setLoading(false);
+
+      return e.toString();
+    }
+  }
 }

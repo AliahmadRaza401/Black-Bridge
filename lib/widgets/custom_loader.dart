@@ -1,5 +1,12 @@
 import '../widgets/widgets_imports.dart';
 
+
+Widget loader(){
+  return CircularProgressIndicator(
+                            color: Colors.black,
+                          );
+}
+
 class CustomLoader extends StatelessWidget {
   const CustomLoader({
     Key? key,

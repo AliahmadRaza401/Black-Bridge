@@ -22,7 +22,7 @@ class Registeration2 extends StatelessWidget {
           width: kWidth(.9),
           child: SingleChildScrollView(
             child: Form(
-              key: controller.formKey,
+              // key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -35,80 +35,39 @@ class Registeration2 extends StatelessWidget {
                     ),
                   ),
                   heightBox(.01),
-                  controller.image.value == null
-                      ? PrimaryButton(
-                          text: "Attach File",
-                          function: () async {
-                            controller.base64Image.value =
-                                await controller.pickFromCamera();
-                            controller.update();
-                          },
-                        )
-                      : Obx(() {
-                          return SizedBox(
-                            width: kWidth(.38),
-                            height: kHeight(.2),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: Container(
-                                    width: kWidth(.36),
-                                    height: kHeight(.18),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: KColors.kPrimary,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.03)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: KColors.kWhite.withOpacity(.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(1, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(kWidth(.01)),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.028)),
-                                      child: Image.memory(
-                                        base64Decode(
-                                            controller.base64Image.value),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (controller.imageEdit.value != null ||
-                                    controller.imageEdit.value != "" &&
-                                        controller.image.value != null)
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        controller.imageEdit.value = null;
-                                        controller.image.value = null;
-                                        controller.update();
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: KColors.kPrimary,
-                                        radius: kWidth(.034),
-                                        child: Icon(
-                                          Icons.close_rounded,
-                                          color: KColors.kWhite,
-                                          size: kWidth(.06),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          );
-                        }),
+                  // ignore: unnecessary_null_comparison
+                  Obx(
+                    () => controller.profileImg.value.isEmpty
+                        ? PrimaryButton(
+                            text: "Attach File",
+                            function: () async {
+                              // controller.getImage(ImageSource.camera);
+                              final pickedFile = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (pickedFile != null) {
+                                controller.profileImg.value = pickedFile.path;
+                              }
+                            },
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                // backgroundColor: AppColors.primaryFuchsiaColor,
+                                backgroundImage: FileImage(
+                                    File(controller.profileImg.value)),
+                                child: controller.profileImg.isEmpty
+                                    ? Icon(Icons.person,
+                                        size: 50, color: Colors.grey[200])
+                                    : null,
+                              ),
+                            ],
+                          ),
+                  ),
+
                   heightBox(.02),
+
                   CustomText(
                     text: "Passport picture *",
                     textStyle: KTextStyles().normal(
@@ -117,77 +76,44 @@ class Registeration2 extends StatelessWidget {
                     ),
                   ),
                   heightBox(.01),
-                  controller.image.value == null
-                      ? PrimaryButton(
-                          text: "Attach File",
-                          function: () async {
-                            controller.base64Image1.value =
-                                await controller.pickFromGallery();
-                          },
-                        )
-                      : Obx(() {
-                          return SizedBox(
-                            width: kWidth(.38),
-                            height: kHeight(.2),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: Container(
-                                    width: kWidth(.36),
-                                    height: kHeight(.18),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: KColors.kPrimary,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.03)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: KColors.kWhite.withOpacity(.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(1, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(kWidth(.01)),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.028)),
-                                      child: Image.memory(
-                                        base64Decode(
-                                            controller.base64Image1.value),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (controller.base64Image1.value != "")
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        controller.base64Image1.value = "";
-                                        controller.base64Image1.value = "";
-                                        controller.base64Image1.value = "";
-                                        controller.update();
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: KColors.kPrimary,
-                                        radius: kWidth(.034),
-                                        child: Icon(
-                                          Icons.close_rounded,
-                                          color: KColors.kWhite,
-                                          size: kWidth(.06),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                  Obx(
+                    () => controller.passportImg.value.isEmpty
+                        ? PrimaryButton(
+                            text: "Attach File",
+                            function: () async {
+                              // controller.getImage(ImageSource.camera);
+                              final pickedFile = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (pickedFile != null) {
+                                controller.passportImg.value = pickedFile.path;
+                              }
+                            },
+                          )
+                        : Container(
+                            height: Get.height * 0.15,
+                            width: Get.width * 0.8,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(
+                                    File(controller.passportImg.value)),
+                              ),
                             ),
-                          );
-                        }),
+                            child: controller.passportImg.isEmpty
+                                ? Icon(Icons.person,
+                                    size: 50, color: Colors.grey[200])
+                                : null,
+                          ),
+                    // CircleAvatar(
+                    //     radius: 50,
+                    //     // backgroundColor: AppColors.primaryFuchsiaColor,
+                    //     backgroundImage:
+                    //         FileImage(File(controller.passportImg.value)),
+                    // child: controller.passportImg.isEmpty
+                    //     ? Icon(Icons.person,
+                    //         size: 50, color: Colors.grey[200])
+                    //     : null,
+                    //   ),
+                  ),
                   heightBox(.02),
                   CustomText(
                     text: "CNIC Picture *",
@@ -197,101 +123,105 @@ class Registeration2 extends StatelessWidget {
                     ),
                   ),
                   heightBox(.01),
-                  controller.image.value == null
-                      ? PrimaryButton(
-                          text: "Attach File",
-                          function: () async {
-                            controller.base64Image2.value =
-                                await controller.pickFromGallery();
-                          },
-                        )
-                      : Obx(() {
-                          return SizedBox(
-                            width: kWidth(.38),
-                            height: kHeight(.2),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: Container(
-                                    width: kWidth(.36),
-                                    height: kHeight(.18),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: KColors.kPrimary,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.03)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: KColors.kWhite.withOpacity(.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(1, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    padding: EdgeInsets.all(kWidth(.01)),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(kWidth(.028)),
-                                      child: Image.memory(
-                                        base64Decode(
-                                            controller.base64Image2.value),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (controller.base64Image2.value != "")
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        controller.base64Image2.value = "";
-                                        controller.base64Image2.value = "";
-                                        controller.update();
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: KColors.kPrimary,
-                                        radius: kWidth(.034),
-                                        child: Icon(
-                                          Icons.close_rounded,
-                                          color: KColors.kWhite,
-                                          size: kWidth(.06),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                  Obx(
+                    () => controller.cnicImg.value.isEmpty
+                        ? PrimaryButton(
+                            text: "Attach File",
+                            function: () async {
+                              // controller.getImage(ImageSource.camera);
+                              final pickedFile = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (pickedFile != null) {
+                                controller.cnicImg.value = pickedFile.path;
+                              }
+                            },
+                          )
+                        : Container(
+                            height: Get.height * 0.15,
+                            width: Get.width * 0.8,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    FileImage(File(controller.cnicImg.value)),
+                              ),
                             ),
-                          );
-                        }),
-                  heightBox(.05),
-                  PrimaryButton(
-                    height: 0.06,
-                    fontsize: 18,
-                    width: .9,
-                    textcolor: KColors.kWhite,
-                    color: KColors.kPrimary,
-                    text: "Create Account",
-                    function: () {
-                      if (!controller.formKey.currentState!.validate()) {
-                        return;
-                      } else if (controller.base64Image.value == "") {
-                        return KSnackBar()
-                            .errorSnackBar("Please Provide Live Selfe");
-                      } else if (controller.base64Image1.value == "") {
-                        return KSnackBar()
-                            .errorSnackBar("Please Provide Passport Picture");
-                      } else if (controller.base64Image2.value == "") {
-                        KSnackBar().errorSnackBar("Please Provide CNIC");
-                      } else {
-                        Get.toNamed("/formpage");
-                      }
-                    },
+                            child: controller.cnicImg.isEmpty
+                                ? Icon(Icons.person,
+                                    size: 50, color: Colors.grey[200])
+                                : null,
+                          ),
+                  ),
+
+                  heightBox(.02),
+                  CustomText(
+                    text: "Driving Licence Picture *",
+                    textStyle: KTextStyles().normal(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   heightBox(.01),
+                  Obx(
+                    () => controller.drivingLImg.value.isEmpty
+                        ? PrimaryButton(
+                            text: "Attach File",
+                            function: () async {
+                              // controller.getImage(ImageSource.camera);
+                              final pickedFile = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (pickedFile != null) {
+                                controller.drivingLImg.value = pickedFile.path;
+                              }
+                            },
+                          )
+                        : Container(
+                            height: Get.height * 0.15,
+                            width: Get.width * 0.8,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(
+                                    File(controller.drivingLImg.value)),
+                              ),
+                            ),
+                            child: controller.drivingLImg.isEmpty
+                                ? Icon(Icons.person,
+                                    size: 50, color: Colors.grey[200])
+                                : null,
+                          ),
+                  ),
+
+                  heightBox(.05),
+                  Obx(
+                    () => controller.loading.value
+                        ? Center(child: loader())
+                        : PrimaryButton(
+                            height: 0.06,
+                            fontsize: 18,
+                            width: .9,
+                            textcolor: KColors.kWhite,
+                            color: KColors.kPrimary,
+                            text: "Create Account",
+                            function: () {
+                              if (!controller.formKey.currentState!
+                                  .validate()) {
+                                return;
+                              } else if (controller.profileImg.value == "") {
+                                return KSnackBar()
+                                    .errorSnackBar("Please Provide Live Selfe");
+                              } else if (controller.passportImg.value == "") {
+                                return KSnackBar().errorSnackBar(
+                                    "Please Provide Passport Picture");
+                              } else if (controller.cnicImg.value == "") {
+                                KSnackBar()
+                                    .errorSnackBar("Please Provide CNIC");
+                              } else {
+                                // Get.toNamed("/formpage");
+                                controller.singUp();
+                              }
+                            },
+                          ),
+                  ),
+                  heightBox(.05),
                 ],
               ),
             ),

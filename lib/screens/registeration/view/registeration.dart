@@ -1,13 +1,11 @@
+import 'package:the_blackbridge_group/screens/registeration/controller/registeration_controller.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
 
 class Registeration extends StatelessWidget {
   Registeration({super.key});
-  final emailController = TextEditingController();
-  final firstnameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final lastnameController = TextEditingController();
-  final passswordController = TextEditingController();
-  final RegisterationController controller = Get.put(RegisterationController());
+
+  final Registeration2Controller controller =
+      Get.put(Registeration2Controller());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +47,7 @@ class Registeration extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: firstnameController,
+                    controller: controller.firstnameController,
                     label: "Enter First Name",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -75,7 +73,7 @@ class Registeration extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: lastnameController,
+                    controller: controller.lastnameController,
                     label: "Enter Last Name",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -101,7 +99,7 @@ class Registeration extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: emailController,
+                    controller: controller.emailController,
                     label: "Enter Email Address",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -127,7 +125,7 @@ class Registeration extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: phoneController,
+                    controller: controller.phoneController,
                     label: "Enter Phone Number",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -153,7 +151,7 @@ class Registeration extends StatelessWidget {
                     themeColor: const Color(0xffCDCDCD),
                     hasSuffix: false,
                     hasPrefix: false,
-                    controller: passswordController,
+                    controller: controller.passswordController,
                     label: "Enter Password",
                     hintText: "",
                     keyboardType: TextInputType.emailAddress,
@@ -162,6 +160,8 @@ class Registeration extends StatelessWidget {
                     function: (value) {
                       if (value!.isEmpty) {
                         return "Enter Password";
+                      } else if (value.length < 8) {
+                        return "Password must be 8 char";
                       }
                       return null;
                     },
