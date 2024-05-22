@@ -53,7 +53,7 @@ class _SplashViewState extends State<SplashView>
             return Transform.scale(
               scale: _scaleAnimation!.value,
               child: Image.asset(
-                "assets/images/logo.png",
+                "assets/images/bl_trns.png",
                 scale: 5,
               ),
             );

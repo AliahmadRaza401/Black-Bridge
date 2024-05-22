@@ -1,7 +1,7 @@
 import '../widgets/widgets_imports.dart';
 
 class Apis {
-  static String baseUrl = "http://lorrent.progressapp.live/api";
+  static String baseUrl = "https://blackbridge.progressapp.live/api";
   static String login = "$baseUrl/login";
   static String register = "$baseUrl/register";
   static String membership = "$baseUrl/membership";

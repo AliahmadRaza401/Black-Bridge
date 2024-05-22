@@ -14,7 +14,7 @@ class IntroScreen extends StatelessWidget {
           children: [
             heightBox(.2),
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/bl_trns.png",
               height: kHeight(.15),
             ),
             const Spacer(),

@@ -15,14 +15,14 @@ class Login extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                heightBox(.08),
+                heightBox(.1),
                 Center(
                   child: Image.asset(
-                    "assets/images/logo.png",
-                    height: kHeight(.15),
+                    "assets/images/bl_trns.png",
+                    height: kHeight(.12),
                   ),
                 ),
-                heightBox(0.1),
+                heightBox(0.07),
                 CustomText(
                     alignText: TextAlign.left,
                     text: "Login Now",
