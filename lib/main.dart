@@ -1,6 +1,10 @@
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:the_blackbridge_group/stripe/stripe.dart';
+
 import 'widgets/widgets_imports.dart';
 
 void main() {
+  Stripe.publishableKey = StripePaymentHandle().STRIPE_PUBLISHABLE;
   runApp(const MyApp());
 }
 

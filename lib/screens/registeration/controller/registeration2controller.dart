@@ -1,6 +1,7 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:the_blackbridge_group/screens/auth/login/model/user_model.dart';
 import 'package:the_blackbridge_group/screens/formpage/view/formpage.dart';
+import 'package:the_blackbridge_group/screens/home/home.dart';
 import 'package:the_blackbridge_group/screens/login/view/login.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
 import 'package:http/http.dart' as http;
@@ -175,7 +176,7 @@ class Registeration2Controller extends GetxController {
 
         pref.setString("userData", jsonEncode(user));
         KSnackBar().successSnackBar("Account Created Successfully!");
-        Get.to(FormPage());
+        Get.to(Home());
         emailController.clear();
       } else {
         KSnackBar().errorSnackBar("${result['data'].toString()}");

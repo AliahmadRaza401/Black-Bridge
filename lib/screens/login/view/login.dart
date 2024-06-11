@@ -1,4 +1,5 @@
 import 'package:the_blackbridge_group/screens/auth/login/controller/login_controller.dart';
+import 'package:the_blackbridge_group/stripe/stripe.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
 
 class Login extends StatelessWidget {

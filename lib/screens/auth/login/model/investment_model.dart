@@ -39,7 +39,7 @@ class InvestmentModel {
 
   factory InvestmentModel.fromJson(Map<String, dynamic> json) =>
       InvestmentModel(
-        id: json["id"],
+        id: json["investment_plan_id"],
         investmentType: json["investment_type"].toString(),
         term: json["term"].toString(),
         rate: json["rate"].toString(),
@@ -53,7 +53,7 @@ class InvestmentModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "investment_plan_id": id,
         "investment_type": investmentType,
         "term": term,
         "rate": rate,

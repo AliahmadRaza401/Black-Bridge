@@ -1,11 +1,14 @@
 import '../widgets/widgets_imports.dart';
 
 class Apis {
-  static String baseUrl = "https://blackbridge.progressapp.live/api";
+  static String baseUrl = "https://blackbridge.nextwys.com/api";
   static String login = "$baseUrl/login";
   static String register = "$baseUrl/register";
   static String membership = "$baseUrl/membership";
   static String investmentPlans = "$baseUrl/investment-plans";
+ static userInterestedPlan(id) {
+    return "$baseUrl/user-intrested-plans/$id";
+  }
 
   // static const Map<String, dynamic> dummyParams = {'query': '""'};
 

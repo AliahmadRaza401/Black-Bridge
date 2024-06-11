@@ -3,38 +3,37 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:tribe_event/screens/user/home/Controller/home_controller.dart';
-import 'package:tribe_event/utils/app_toast.dart';
-import 'package:http/http.dart' as http;
 
-import 'api_constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:the_blackbridge_group/screens/formpage/controller/formpage_controller.dart';
+import 'package:the_blackbridge_group/widgets/snackbars.dart';
 
 class StripePaymentHandle {
   String STRIPE_SECRET =
-      'sk_test_51PAuR4L0LhVOzMcJn8nyxv2eCcg1B2gu1HI2qkCF2QFuSjMor1Zt34Ae9pv8aX2SSVnjoHITqBtsnOQF9kKNTLoP00HkGFkJPe';
+      "sk_test_51PNoNHRx0IYyLzy0wJLAltJDYewLj3vaVwia7rm4n5S3rRsgNt8r7zaAvFuvwQc3dO5GVFJP0doarN7MMhINgTWT00Czej1N3I";
+  // 'sk_test_51PAuR4L0LhVOzMcJn8nyxv2eCcg1B2gu1HI2qkCF2QFuSjMor1Zt34Ae9pv8aX2SSVnjoHITqBtsnOQF9kKNTLoP00HkGFkJPe';
   String STRIPE_PUBLISHABLE =
-      "pk_test_51PAuR4L0LhVOzMcJjzvloWpit2fvae0KxMfDz0Ob0wuoLHDlBnHhntRP4BGh60WnKwpGvE8DPjBSyuzgcDJLZq1F000XNjhero";
+      "pk_test_51PNoNHRx0IYyLzy04Etcb35Lwth4AE3wxKnBUh1WBtC90nwn6XvhC5Oy8uvU97NRIyJRZZEqWZk5vktCRX7dnrvH00thos5W6Z";
+  // "pk_test_51PAuR4L0LhVOzMcJjzvloWpit2fvae0KxMfDz0Ob0wuoLHDlBnHhntRP4BGh60WnKwpGvE8DPjBSyuzgcDJLZq1F000XNjhero";
+
+//  Call STRIPE_PUBLISHABLE into mian   Stripe.publishableKey = StripePaymentHandle().STRIPE_PUBLISHABLE;
 
   Map<String, dynamic>? paymentIntent;
   String paymentid = '';
 
-  Future<bool> stripeMakePayment({String amount = '',bool isBuy=false}) async {
+  Future<bool> stripeMakePayment({String amount = ''}) async {
     try {
       paymentIntent = await createPaymentIntent(amount, 'USD');
       paymentid = paymentIntent!['id'];
-      if(!isBuy) {
-        HomeController controller = Get.find();
-        controller.updateCardId('1',paymentid);
-      }
-      ApiConstants.paymentId=paymentid;
+
       // controller.updateCardId(paymentid);
       print('payment id from stripe class $paymentid');
       await Stripe.instance
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
                   billingDetails: const BillingDetails(
-                      name: 'Tribe event',
-                      email: 'tribeEvent@gmail.com',
+                      name: 'Black Bridge',
+                      email: 'blackbridge@gmail.com',
                       phone: '0032023032',
                       address: Address(
                           city: 'YOUR CITY',
@@ -54,11 +53,11 @@ class StripePaymentHandle {
       return displayPaymentSheet();
     } on StripeConfigException catch (e) {
       print(e.message);
-      appToast(e.message);
+      KSnackBar().errorSnackBar(e.message);
       return false;
     } catch (e) {
       print(e.toString());
-      appToast(e.toString());
+      KSnackBar().errorSnackBar(e.toString());
       return false;
     }
   }
@@ -67,13 +66,18 @@ class StripePaymentHandle {
     try {
       // 3. display the payment sheet.
       await Stripe.instance.presentPaymentSheet();
-      appToast('Payment successfully completed');
+      // KSnackBar().successSnackBar('Payment successfully completed');
+      final FormPageController controller = Get.put(FormPageController());
+
+      controller.formSubmit();
+
       return true;
     } on Exception catch (e) {
       if (e is StripeException) {
-        appToast('Error from Stripe: ${e.error.localizedMessage}');
+        KSnackBar()
+            .errorSnackBar('Error from Stripe: ${e.error.localizedMessage}');
       } else {
-        appToast('Unforeseen error: ${e}');
+        KSnackBar().errorSnackBar('Unforeseen error: ${e}');
       }
       return false;
     }

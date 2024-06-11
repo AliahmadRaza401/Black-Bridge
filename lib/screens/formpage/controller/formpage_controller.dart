@@ -119,6 +119,8 @@ class FormPageController extends GetxController {
 
       if (response.statusCode.toString() == "201") {
         Get.to(Home());
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setBool("membership", true);
 
         KSnackBar().successSnackBar("Membership created Successfully");
       } else {

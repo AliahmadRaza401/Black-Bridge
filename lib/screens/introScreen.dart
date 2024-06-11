@@ -32,7 +32,7 @@ class IntroScreen extends StatelessWidget {
                       alignText: TextAlign.left,
                       maxLines: 8,
                       text:
-                          "• Exclusive investment opportunities\n• Above market returns\n• Access to opportunities prior to launch\n• Investment starts as a Pledge, no need to transfer funds\n• All live investments receive bonus enhancements\n• New avenues for growth and prosperity",
+                          "•Exclusive investment opportunities\n• Above market returns\n• Access to opportunities prior to launch\n• Investment starts as a Pledge, no need to transfer funds\n• All live investments receive bonus enhancements\n• New avenues for growth and prosperity",
                       textStyle: KTextStyles().normal(
                           textColor: KColors.kWhite,
                           fontWeight: FontWeight.w500)),

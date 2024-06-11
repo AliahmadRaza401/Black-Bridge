@@ -1,4 +1,5 @@
 import 'package:the_blackbridge_group/screens/formpage/controller/formpage_controller.dart';
+import 'package:the_blackbridge_group/stripe/stripe.dart';
 import 'package:the_blackbridge_group/widgets/app_widgets.dart';
 import 'package:the_blackbridge_group/widgets/widgets_imports.dart';
 
@@ -355,7 +356,7 @@ class FormPage extends StatelessWidget {
                               if (controller.box1.isTrue &&
                                   controller.box2.isTrue &&
                                   controller.box3.isTrue) {
-                                controller.formSubmit();
+                                  StripePaymentHandle().stripeMakePayment(amount: "700");
                               } else {
                                 KSnackBar().infoSnackBar(
                                     "Please select the all checkbox");
